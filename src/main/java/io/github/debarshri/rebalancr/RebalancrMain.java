@@ -14,9 +14,7 @@ import static spark.Spark.get;
 
 public class RebalancrMain {
     public static void main(String[] args) throws IOException {
-
         final Opts opts = CliFactory.parseArguments(Opts.class, args);
-
         File file = new File(opts.getMapping());
 
         if(!file.exists())
@@ -24,6 +22,7 @@ public class RebalancrMain {
             file.createNewFile();
         }
 
+        //Todo only get operations allowed
         Map<String, Mapping> params = process(readLines(file));
 
         Spark.port(opts.getPort());

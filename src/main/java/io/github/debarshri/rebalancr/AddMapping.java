@@ -27,8 +27,8 @@ public class AddMapping implements Route {
         final String value = request.queryParams("out");
         final String masked = request.queryParams("mask");
 
-        params.put(key.trim(), new Mapping(value.trim(),Boolean.valueOf(masked)));
-        executorService.submit(new FileRunner(file, key+" -> "+value+" -> "+Boolean.valueOf(masked)+"\n"));
+        params.put(key.trim(), new Mapping(value.trim(),Boolean.valueOf(masked), "v1"));
+        executorService.submit(new FileRunner(file, key+" -> "+value+" -> "+Boolean.valueOf(masked)+" -> v1\n"));
 
         return "Ok";
     }

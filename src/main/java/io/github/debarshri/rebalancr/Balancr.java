@@ -18,7 +18,6 @@ public class Balancr implements Route {
         this.params = params;
     }
 
-    //Todo masking..
     public Object handle(Request request, Response response) throws Exception {
 
         String[] split = request.host().split(":");
@@ -28,28 +27,51 @@ public class Balancr implements Route {
         if (request.splat().length == 0) {
             Mapping mapping = params.get(hostname.trim());
 
+            if(mapping == null)
+            {
+                System.out.println("Error link not found");
+                return null;
+            }
+
             String redirectedUrl = mapping.getRedirectedUrl();
             if (mapping.isMasked()) {
-                return Get(redirectedUrl);
+                System.out.println(redirectedUrl);
+                return Get(redirectedUrl).execute().returnContent();
             }
 
             response.status(302);
             response.redirect(redirectedUrl);
         }
+        else {
 
-        String s1 = request.splat()[0];
-        String s = params.get(hostname.trim()).getRedirectedUrl();
-
-        if (s != null) {
-            if (s1 == null) {
-                s1 = "";
+            String s1 = request.splat()[0];
+            Mapping mapping = params.get(hostname.trim());
+            if (mapping == null) {
+                System.out.println("Error link not found");
+                return null;
             }
 
-            System.out.println("Redirecting " + s + "/" + s1);
-            response.status(302);
-            response.redirect(s + "/" + s1);
-        }
+            String s = mapping.getRedirectedUrl();
 
+            if (s != null) {
+                if (s1 == null) {
+                    s1 = "";
+                }
+
+                System.out.println("Redirecting " + s + "/" + s1);
+
+                String redirectedUrl = s + "/" + s1;
+
+                if (mapping.isMasked()) {
+                    System.out.println(redirectedUrl);
+                    return Get(redirectedUrl).execute().returnContent();
+                }
+
+                response.status(302);
+                response.redirect(redirectedUrl);
+            }
+        }
         return "Site not found";
+
     }
 }

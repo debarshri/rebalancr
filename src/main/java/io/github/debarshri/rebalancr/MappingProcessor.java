@@ -23,7 +23,9 @@ public class MappingProcessor {
 
         public void accept(String s) {
             String[] key = s.split("->");
-            stringStringHashMap.put(key[0].trim(), new Mapping(key[1].trim(), Boolean.valueOf(key[2].trim())));
+            stringStringHashMap.put(key[0].trim(),
+                    new Mapping(key[1].trim(),
+                            Boolean.valueOf(key[2].trim()),"v1" ));
         }
     }
 }
