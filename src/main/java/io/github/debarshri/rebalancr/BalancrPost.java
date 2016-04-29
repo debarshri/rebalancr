@@ -4,18 +4,11 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.util.Map;
-
-import static org.apache.http.client.fluent.Request.Get;
 import static org.apache.http.client.fluent.Request.Post;
 
 public class BalancrPost implements Route {
-    private Map<String, Mapping> params;
 
-    public BalancrPost(Map<String, Mapping> params) {
-        this.params = params;
-    }
-
+    //todo add headers
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String[] split = request.host().split(":");
@@ -23,27 +16,22 @@ public class BalancrPost implements Route {
         String hostname = split[0];
 
         if (request.splat().length == 0) {
-            Mapping mapping = params.get(hostname.trim());
+            Mapping mapping = MappingListener.params().get(hostname.trim());
 
-            if(mapping == null)
-            {
+            if (mapping == null) {
                 System.out.println("Error link not found");
                 return null;
             }
 
             String redirectedUrl = mapping.getRedirectedUrl();
-            if (mapping.isMasked()) {
-                System.out.println(redirectedUrl);
-                return Post(redirectedUrl).execute().returnContent();
-            }
+            System.out.println(redirectedUrl);
 
-            response.status(302);
-            response.redirect(redirectedUrl);
-        }
-        else {
+            return Post(redirectedUrl).execute().returnContent();
+
+        } else {
 
             String s1 = request.splat()[0];
-            Mapping mapping = params.get(hostname.trim());
+            Mapping mapping = MappingListener.params().get(hostname.trim());
             if (mapping == null) {
                 System.out.println("Error link not found");
                 return null;
@@ -57,16 +45,9 @@ public class BalancrPost implements Route {
                 }
 
                 System.out.println("Redirecting " + s + "/" + s1);
-
                 String redirectedUrl = s + "/" + s1;
 
-                if (mapping.isMasked()) {
-                    System.out.println(redirectedUrl);
-                    return Post(redirectedUrl).execute().returnContent();
-                }
-
-                response.status(302);
-                response.redirect(redirectedUrl);
+                return Post(redirectedUrl).execute().returnContent();
             }
         }
         return "Site not found";

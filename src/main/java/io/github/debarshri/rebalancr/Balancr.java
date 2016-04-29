@@ -4,19 +4,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.util.Map;
-
 import static org.apache.http.client.fluent.Request.*;
 
 /**
  * curl -L "http://artifact.onlineeuropeancourse.eu/get/propr"
  */
 public class Balancr implements Route {
-    private Map<String, Mapping> params;
 
-    public Balancr(Map<String, Mapping> params) {
-        this.params = params;
-    }
+
 
     public Object handle(Request request, Response response) throws Exception {
 
@@ -25,7 +20,7 @@ public class Balancr implements Route {
         String hostname = split[0];
 
         if (request.splat().length == 0) {
-            Mapping mapping = params.get(hostname.trim());
+            Mapping mapping = MappingListener.params().get(hostname.trim());
 
             if(mapping == null)
             {
@@ -45,7 +40,7 @@ public class Balancr implements Route {
         else {
 
             String s1 = request.splat()[0];
-            Mapping mapping = params.get(hostname.trim());
+            Mapping mapping = MappingListener.params().get(hostname.trim());
             if (mapping == null) {
                 System.out.println("Error link not found");
                 return null;

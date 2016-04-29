@@ -1,14 +1,14 @@
 package io.github.debarshri.rebalancr;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class MappingProcessor {
     public static Map<String, Mapping> process(List<String> s) {
 
-        Map<String, Mapping> stringStringHashMap = new HashMap<>();
+        Map<String, Mapping> stringStringHashMap = new ConcurrentHashMap<>();
         s.stream().forEach(new Mapper(stringStringHashMap));
 
         return stringStringHashMap;
