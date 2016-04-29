@@ -30,5 +30,6 @@ public class RebalancrMain {
         get("/", new Balancr(params));
         get("/*", new Balancr(params));
         post("/add", new AddMapping(params,file));
+     //   post("/*", new BalancrPost(params));
     }
 }

@@ -6,20 +6,18 @@ import spark.Route;
 
 import java.util.Map;
 
-import static org.apache.http.client.fluent.Request.*;
+import static org.apache.http.client.fluent.Request.Get;
+import static org.apache.http.client.fluent.Request.Post;
 
-/**
- * curl -L "http://artifact.onlineeuropeancourse.eu/get/propr"
- */
-public class Balancr implements Route {
+public class BalancrPost implements Route {
     private Map<String, Mapping> params;
 
-    public Balancr(Map<String, Mapping> params) {
+    public BalancrPost(Map<String, Mapping> params) {
         this.params = params;
     }
 
+    @Override
     public Object handle(Request request, Response response) throws Exception {
-
         String[] split = request.host().split(":");
 
         String hostname = split[0];
@@ -36,7 +34,7 @@ public class Balancr implements Route {
             String redirectedUrl = mapping.getRedirectedUrl();
             if (mapping.isMasked()) {
                 System.out.println(redirectedUrl);
-                return Get(redirectedUrl).execute().returnContent();
+                return Post(redirectedUrl).execute().returnContent();
             }
 
             response.status(302);
@@ -64,7 +62,7 @@ public class Balancr implements Route {
 
                 if (mapping.isMasked()) {
                     System.out.println(redirectedUrl);
-                    return Get(redirectedUrl).execute().returnContent();
+                    return Post(redirectedUrl).execute().returnContent();
                 }
 
                 response.status(302);
